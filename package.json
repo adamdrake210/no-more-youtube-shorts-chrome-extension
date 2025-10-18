@@ -1,12 +1,14 @@
 {
   "name": "no_more_youtube_shorts_please",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "sync-version": "node scripts/sync-version.js",
+    "build:zip": "pnpm sync-version && pnpm build && node scripts/zip.js"
   },
   "keywords": [],
   "author": "",
@@ -17,11 +19,17 @@
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.0.4",
+    "archiver": "^7.0.1",
+    "postcss": "^8.5.6",
+    "postcss-preset-mantine": "^1.18.0",
+    "postcss-simple-vars": "^7.0.1",
     "typescript": "^5.9.3",
     "vite": "^7.1.10",
     "vite-plugin-static-copy": "^3.1.4"
   },
   "dependencies": {
+    "@mantine/core": "^8.3.5",
+    "@mantine/hooks": "^8.3.5",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   }

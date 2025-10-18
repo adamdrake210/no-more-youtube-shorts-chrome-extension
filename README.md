@@ -32,6 +32,14 @@ The dev server will run at `http://localhost:5173/`
 
 - View the popup at: `http://localhost:5173/src/popup/`
 
+## Load in Chrome for Development
+
+1. Run `pnpm run build` to create the `dist` folder
+2. Open Chrome and navigate to `chrome://extensions/`
+3. Enable "Developer mode" (toggle in top-right corner)
+4. Click "Load unpacked"
+5. Select the `dist` folder from this project
+
 ## Build
 
 ```bash
@@ -41,30 +49,15 @@ pnpm run build
 
 This creates a production-ready extension in the `dist/` folder.
 
-## Load in Chrome
+## Process for releasing a new version
 
-1. Run `pnpm run build` to create the `dist` folder
-2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable "Developer mode" (toggle in top-right corner)
-4. Click "Load unpacked"
-5. Select the `dist` folder from this project
+1. Run `pnpm version patch` to update the version in the `package.json` file
+2. Run `pnpm run build:zip` to create the `zips/extension-v${pkg.version}.zip` file
+3. Upload the `zips/extension-v${pkg.version}.zip` file to the Chrome Web Store
 
-## Project Structure
+## Icon Generation
 
-```
-├── src/
-│   ├── assets/          # Icons and static assets
-│   ├── popup/           # Extension popup UI
-│   │   ├── index.html
-│   │   └── popup.tsx
-│   ├── background.ts    # Background service worker
-│   ├── content.ts       # Content script
-│   └── manifest.json    # Extension manifest
-├── dist/                # Build output (generated)
-├── vite.config.ts       # Vite configuration
-├── tsconfig.json        # TypeScript configuration
-└── package.json         # Project dependencies
-```
+Visit here: https://alexleybourne.github.io/chrome-extension-icon-generator/
 
 ## License
 
