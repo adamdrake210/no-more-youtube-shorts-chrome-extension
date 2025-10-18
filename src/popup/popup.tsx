@@ -15,19 +15,21 @@ const App = () => {
     }
 
     setIsEnabled(!isEnabled);
+    const newIsEnabled = !isEnabled;
 
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab.id) return;
 
     await chrome.scripting.executeScript({
       target: { tabId: tab.id },
-      func: () => {
+      func: (shouldHide: boolean) => {
         // This code runs inside the webpage
         const youtubeShortsSection = document.querySelectorAll('[is-shorts]');
         youtubeShortsSection.forEach((section) => {
-          (section as HTMLElement).style.display = 'none';
+          (section as HTMLElement).style.display = shouldHide ? 'none' : 'block';
         });
       },
+      args: [newIsEnabled],
     });
   };
 
