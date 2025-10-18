@@ -41,6 +41,10 @@ pnpm run build
 
 This creates a production-ready extension in the `dist/` folder.
 
+## Icon Generation
+
+Visit here: https://alexleybourne.github.io/chrome-extension-icon-generator/
+
 ## Load in Chrome
 
 1. Run `pnpm run build` to create the `dist` folder
