@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import '@mantine/core/styles.css';
-import { Box, Flex, Group, Image, MantineProvider, Switch, Text, Title } from '@mantine/core';
+import { Box, Flex, Group, MantineProvider, Switch, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
 const App = () => {
