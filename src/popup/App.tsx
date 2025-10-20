@@ -1,6 +1,7 @@
-import { Group, Box, Flex, Text, Title, Switch } from '@mantine/core';
+import { Group, Box, Flex, Text, Title, Switch, Divider } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { AppProviders } from './AppProviders';
+import { MadeBy } from './components/MadeBy';
 
 export const App = () => {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -8,9 +9,14 @@ export const App = () => {
 
   // Load state on mount
   useEffect(() => {
-    chrome.storage?.local.get(['shortsHidden'], (result) => {
+    chrome.storage?.local.get(['shortsHidden'], async (result) => {
       if (result.shortsHidden !== undefined) {
-        setIsEnabled(result.shortsHidden);
+        const [tab] = await chrome.tabs?.query({ active: true, currentWindow: true });
+        if (!tab.id) return;
+
+        const tabId = tab.id;
+        const tabIsEnabled = result.shortsHidden[tabId] || false;
+        setIsEnabled(tabIsEnabled);
       }
     });
   }, []);
@@ -33,11 +39,18 @@ export const App = () => {
     const newIsEnabled = !isEnabled;
     setIsEnabled(newIsEnabled);
 
-    // Save state to chrome.storage
-    await chrome.storage?.local.set({ shortsHidden: newIsEnabled });
-
     const [tab] = await chrome.tabs?.query({ active: true, currentWindow: true });
     if (!tab.id) return;
+
+    const tabId = tab.id;
+
+    // Save state to chrome.storage (merge with existing data)
+    chrome.storage?.local.get(['shortsHidden'], (result) => {
+      const currentData = result.shortsHidden || {};
+      chrome.storage?.local.set({
+        shortsHidden: { ...currentData, [tabId]: newIsEnabled },
+      });
+    });
 
     await chrome.scripting?.executeScript({
       target: { tabId: tab.id },
@@ -82,6 +95,8 @@ export const App = () => {
             </Text>
           )}
         </Group>
+        <Divider my={12} />
+        <MadeBy />
       </Box>
     </AppProviders>
   );
