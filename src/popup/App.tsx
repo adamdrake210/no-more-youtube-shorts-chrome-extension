@@ -1,6 +1,6 @@
 import { Group, Box, Flex, Text, Title, Switch, Divider } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { AppProviders } from './AppProviders';
+import { AppProviders } from '../components/AppProviders';
 import { MadeBy } from './components/MadeBy';
 
 export const App = () => {
