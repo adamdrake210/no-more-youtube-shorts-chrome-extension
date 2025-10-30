@@ -1,10 +1,5 @@
 import { createRoot } from 'react-dom/client';
-
-const App = () => {
-  const onClick = () => {
-    alert('Hello from popup!');
-  };
-  return <button onClick={onClick}>Click Me!</button>;
-};
+import '@mantine/core/styles.css';
+import { App } from './App';
 
 createRoot(document.getElementById('root')!).render(<App />);
