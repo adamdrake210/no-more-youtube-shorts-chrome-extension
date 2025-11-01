@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "No More YouTube Shorts Please",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A Chrome extension that blocks YouTube shorts from appearing on your YouTube homepage.",
   "background": {
     "service_worker": "assets/background.js"
@@ -14,11 +14,20 @@
       "128": "assets/icon128.png"
     }
   },
-  "permissions": ["tabs", "scripting", "activeTab", "storage"],
+  "permissions": [
+    "tabs",
+    "scripting",
+    "activeTab",
+    "storage"
+  ],
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*"],
-      "js": ["assets/content.js"],
+      "matches": [
+        "*://*.youtube.com/*"
+      ],
+      "js": [
+        "assets/content.js"
+      ],
       "run_at": "document_end"
     }
   ]
