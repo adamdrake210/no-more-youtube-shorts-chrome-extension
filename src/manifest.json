@@ -14,10 +14,12 @@
       "128": "assets/icon128.png"
     }
   },
-  "permissions": [
-    "tabs",
-    "scripting",
-    "activeTab",
-    "storage"
+  "permissions": ["tabs", "scripting", "activeTab", "storage"],
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["assets/content.js"],
+      "run_at": "document_end"
+    }
   ]
 }

@@ -3,72 +3,29 @@ import { useEffect, useState } from 'react';
 import { AppProviders } from '../components/AppProviders';
 import { MadeBy } from './components/MadeBy';
 
-export const App = () => {
+type Props = {};
+
+const App = ({}: Props) => {
   const [isEnabled, setIsEnabled] = useState(false);
-  const [currentUrl, setCurrentUrl] = useState('');
-
-  // Load state on mount
-  useEffect(() => {
-    chrome.storage?.local.get(['shortsHidden'], async (result) => {
-      if (result.shortsHidden !== undefined) {
-        const [tab] = await chrome.tabs?.query({ active: true, currentWindow: true });
-        if (!tab.id) return;
-
-        const tabId = tab.id;
-        const tabIsEnabled = result.shortsHidden[tabId] || false;
-        setIsEnabled(tabIsEnabled);
-      }
-    });
-  }, []);
-
-  // Current tab URL
-  useEffect(() => {
-    chrome.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
-      setCurrentUrl(tabs[0]?.url || '');
-    });
-  }, []);
 
   const onClick = async () => {
-    const url = (await chrome.tabs.query({ active: true, currentWindow: true }))[0]?.url;
-
-    if (url && !url.includes('youtube.com')) {
-      alert('Current tab is not a YouTube tab');
-      return;
-    }
-
     const newIsEnabled = !isEnabled;
     setIsEnabled(newIsEnabled);
 
-    const [tab] = await chrome.tabs?.query({ active: true, currentWindow: true });
-    if (!tab.id) return;
-
-    const tabId = tab.id;
-
-    // Save state to chrome.storage (merge with existing data)
-    chrome.storage?.local.get(['shortsHidden'], (result) => {
-      const currentData = result.shortsHidden || {};
-      chrome.storage?.local.set({
-        shortsHidden: { ...currentData, [tabId]: newIsEnabled },
-      });
-    });
-
-    await chrome.scripting?.executeScript({
-      target: { tabId: tab.id },
-      func: (shouldHide: boolean) => {
-        // This code runs inside the webpage
-        const youtubeShortsSection = document.querySelectorAll('[is-shorts]');
-        youtubeShortsSection.forEach((section) => {
-          (section as HTMLElement).style.display = shouldHide ? 'none' : 'block';
-        });
-
-        const youtubeShortsNavigation = document.querySelectorAll('a[title="Shorts"]');
-        youtubeShortsNavigation.forEach((navigation) => {
-          (navigation as HTMLElement).style.display = shouldHide ? 'none' : 'block';
-        });
-      },
-      args: [newIsEnabled],
+    // Save state to chrome.storage - content script will listen and apply changes
+    chrome.storage?.local.set({
+      shortsHidden: newIsEnabled,
     });
   };
+
+  // Load state on mount
+  useEffect(() => {
+    chrome.storage?.local.get(['shortsHidden'], (result) => {
+      if (result.shortsHidden !== undefined) {
+        setIsEnabled(result.shortsHidden);
+      }
+    });
+  }, []);
 
   return (
     <AppProviders>
@@ -77,23 +34,17 @@ export const App = () => {
           <Title order={4}>No More YouTube Shorts Please</Title>
         </Flex>
         <Text size="xs" c="dimmed">
-          Switch to hide YouTube Shorts on this tab. Youtube shorts are an abomination and should be
-          hidden from view.
+          Switch to hide YouTube Shorts from your YouTube homepage. Youtube shorts are an
+          abomination on the mind and should be hidden from view, so you can reclaim your time and
+          attention.
         </Text>
         <Group justify="flex-end" mt={10}>
-          {currentUrl && currentUrl.includes('youtube.com') && (
-            <Switch
-              labelPosition="left"
-              label="Hide YouTube Shorts"
-              checked={isEnabled}
-              onChange={onClick}
-            />
-          )}
-          {currentUrl && !currentUrl.includes('youtube.com') && (
-            <Text size="xs" c="dimmed">
-              Current tab is not a YouTube tab
-            </Text>
-          )}
+          <Switch
+            labelPosition="left"
+            label="Hide YouTube Shorts"
+            checked={isEnabled}
+            onChange={onClick}
+          />
         </Group>
         <Divider my={12} />
         <MadeBy />
@@ -101,3 +52,5 @@ export const App = () => {
     </AppProviders>
   );
 };
+
+export { App };
