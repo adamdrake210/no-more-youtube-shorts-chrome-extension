@@ -33,6 +33,7 @@ export default defineConfig({
         popup: 'src/popup/index.html',
         background: 'src/background.ts',
         content: 'src/content.ts',
+        onboarding: 'src/onboarding/index.html',
       },
       output: {
         entryFileNames: 'assets/[name].js',

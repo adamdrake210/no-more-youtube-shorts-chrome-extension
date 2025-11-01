@@ -1,6 +1,6 @@
 {
   "name": "no_more_youtube_shorts_please",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "type": "module",
   "scripts": {
@@ -31,6 +31,7 @@
   "dependencies": {
     "@mantine/core": "^8.3.5",
     "@mantine/hooks": "^8.3.5",
+    "@tabler/icons-react": "^3.35.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   }
