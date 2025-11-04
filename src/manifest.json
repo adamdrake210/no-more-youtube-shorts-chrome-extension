@@ -14,7 +14,7 @@
       "128": "assets/icon128.png"
     }
   },
-  "permissions": ["tabs", "storage", "runtime"],
+  "permissions": ["storage", "runtime"],
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*"],
